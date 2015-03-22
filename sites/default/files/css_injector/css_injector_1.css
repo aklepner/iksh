@@ -1,0 +1,74 @@
+/* @override http://localhost:8888/ikushold/sites/default/files/css_injector/css_injector_1.css?nk7e0d */
+
+/* @override http://localhost:8888/ikushold/sites/default/files/css_injector/css_injector_1.css?nk7e0d */
+
+/**/
+
+#views-exposed-form-map-page div div.views-exposed-form div.views-exposed-widgets.clearfix {
+	background-color: #ffffff;
+	margin-left: -15px;
+	padding-left: 15px;
+	margin-right: -14px;
+	padding-bottom: 10px;
+}
+
+div.openlayers-views-map {
+	margin-left: -15px;
+	margin-right: -14px;
+	margin-top: -10px;
+}
+
+#edit-field-geofield-distance-distance {
+	width: 150px;
+}
+
+#edit-field-geofield-distance-origin {
+		width: 350px;
+}
+
+div.form-item.form-type-select.form-item-field-geofield-distance-unit.form-group {
+	margin-top: 0;
+	padding-top: 0;
+}
+
+#edit-submit-map {
+	margin-top: -3px;
+}
+body{
+	background-color: #000;
+}
+
+small.copyright.pull-left {
+	display: none;
+}
+
+div.page-header {
+	margin-bottom: 0;
+}
+
+#block-views-featured-dispensaries-block div.content div.view.view-featured-dispensaries.view-id-featured_dispensaries div.view-content div.views-row {
+	float: left;
+	margin-right: 13px;
+	margin-bottom: 15px;
+	background-color: #ffffff;
+	height: 280px;
+	border: 1px solid #e4e4e4;
+}
+
+div.views-field.views-field-title {
+	margin-left: 10px;
+	font-size: 18px;
+	font-weight: bold;
+}
+
+div.views-field.views-field-field-address span.country {
+	display: none;
+}
+
+div.views-field.views-field-field-address {
+		margin-left: 10px;
+}
+
+div.views-field.views-field-field-phone {
+		margin-left: 10px;
+}

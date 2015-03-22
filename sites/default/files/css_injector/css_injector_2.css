@@ -1,0 +1,15 @@
+/**/
+
+#block-block-4 {
+	margin-left: -15px;
+	margin-top: 0;
+}
+
+.view-featured-dispensaries div.views-row {
+	float: left;
+	margin-right: 10px;
+	height: 300px;
+	margin-bottom: 10px;
+	background-color: #fff;
+	border: 1px solid #c3c3c3;
+}
