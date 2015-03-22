@@ -1,0 +1,5 @@
+name = Cart Tokens
+description = Adds cart token functionality
+package = Kushit
+core = 7.x
+dependencies[] = token

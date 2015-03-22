@@ -1,0 +1,21 @@
+***************
+*** 97,104 ****
+    $options['method'] = $method == 'POST' ? 'POST' : 'GET';
+  
+    // Data.
+-   $options['data'] = drupal_http_build_query(drupal_parse_info_format($data));
+- 
+    // Max redirects.
+    $options['max_redirects'] = empty($max_redirects) ? 3 : $max_redirects;
+  
+--- 99,108 ----
+    $options['method'] = $method == 'POST' ? 'POST' : 'GET';
+  
+    // Data.
++   if( isset($data) ){
++   	$options['data'] = drupal_http_build_query(drupal_parse_info_format($data));
++   }
++   
+    // Max redirects.
+    $options['max_redirects'] = empty($max_redirects) ? 3 : $max_redirects;
+  

@@ -1,0 +1,45 @@
+// Styles for main layout
+// --------------------------------------------------
+#main {
+	background-color: #272727;
+	div.container {
+	background-color: #eaeaea;
+	}
+	.breadcrumb{
+	display: none;
+	}
+	h1{
+	padding-top: 5px;
+	}
+}
+#header{
+	background-color: #000;
+}
+.navbar {
+  position: relative;
+  min-height: 50px;
+  margin-bottom: 20px;
+  border: 0px solid transparent;
+}
+.navbar-collapse {
+  overflow-x: visible;
+  padding-right: 15px;
+  padding-left: 15px;
+  -webkit-overflow-scrolling: touch;
+}
+
+a#logo.navbar-brand {
+	width: 208px;
+	height: 100px;
+	display: inline;
+}
+
+#navbar-collapse {
+	background-color: transparent;
+	 border-top: 0px solid transparent;
+
+}
+
+div#navbar-collapse.collapse.navbar-collapse {
+	background-color: #000;
+}

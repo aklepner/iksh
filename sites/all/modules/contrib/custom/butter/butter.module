@@ -1,0 +1,24 @@
+<?php
+/*
+ * cache options 
+ * - duration, bin
+ * 
+ */
+function butter_cache_query($id, $query, $args = NULL, $cache_options = array()) {
+	
+	if(!isset($cache_options['expire'])) { $cache_options['expire'] = CACHE_TEMPORARY; }
+	if(!isset($cache_options['bin'])) { $cache_options['bin'] = 'cache'; }
+	
+	if($data = cache_get('butter-'.$id)) {
+		return $data->data;
+	} else {
+		$q = db_query($query, $args);
+		$result_data = array();
+		while($res = $q->fetchAssoc()) {
+			$result_data = $res; 
+		}
+		cache_set('butter-'.$id, $result_data, $cache_options['bin'], $cache_options['expire']);
+		return $result_data;
+	}
+	
+}

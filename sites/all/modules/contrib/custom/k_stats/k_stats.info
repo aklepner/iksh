@@ -1,0 +1,4 @@
+name = Kushit Stats
+description = Gathers and caches statistics about the site
+core = 7.x
+package = Kushit

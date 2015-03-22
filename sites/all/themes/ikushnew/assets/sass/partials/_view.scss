@@ -1,0 +1,86 @@
+// Styles for Views
+// --------------------------------------------------
+		
+.kushit-flipped-products {
+	background-color: #ffffff;
+	th.views-field{
+		display: none;
+	}
+	tables.views-table{
+		background-color: #ffffff;
+		margin-bottom: 20px;
+	}
+	#prodlistinfo {
+	background-color: #ffffff;	
+	}
+	#prodlistinfo {
+		padding-left: 20px;
+		background-color: #ffffff;	
+		color: #000000;
+	float: left;
+		max-width: 440px;
+	}
+	#prodlistimg {
+		float: left;
+	}
+	#prodlisttitle{
+		padding-top: 5px;
+		font-size: 20px;
+		font-weight: bold;
+	}
+	.views-table tbody {
+	}
+	table{
+	  	background-color: #fff;
+	  	border-bottom: 15px solid;
+	  	border-color: #eaeaea;
+	}
+	
+	tr.even,
+	tr.odd {
+	  	background-color: #fff;
+	}
+	caption {
+  		padding-top: 0px;
+  		}
+
+}
+.col-md-6.radix-layouts-contentcolumn1.panel-panel {
+	border: 1px solid #cdcdcd;
+	background-color: #ffffff;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin-left: 10px;
+	width: 380px;
+	margin-bottom: 20px;
+}
+
+.field.field-name-field-phone {
+	font-size: 22px;
+	margin-top: 5px;
+}
+
+.container-fluid div.row div.col-md-8.panel-panel div.row {
+
+}
+.field.field-name-field-address.field-type-addressfield.field-label-hidden {
+	font-size: 18px;
+	line-height: 20px;
+	color: #7a7a7a;
+}
+.form-submit.btn.btn-default.btn-primary {
+	background-color: #000;
+	text-transform: uppercase;
+}
+#main-menu {
+	float: right;
+}
+.navbar-form{
+	display: none;
+}
+a#logo.navbar-brand {
+	width: 250px;
+	height: 110px;
+	display: inline;
+	background: url(newikush-logo250.png) no-repeat;
+}

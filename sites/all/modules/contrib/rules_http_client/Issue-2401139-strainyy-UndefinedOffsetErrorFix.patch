@@ -1,0 +1,38 @@
+diff --git a/rules_http_client.rules.inc b/rules_http_client.rules.inc
+index 73ff77b..ce079d6 100755
+--- a/rules_http_client.rules.inc
++++ b/rules_http_client.rules.inc
+@@ -84,12 +84,14 @@ function rules_http_client_options_method() {
+  */
+ function rules_http_client_request_url($url, $headers = '', $method = 'GET', $data = NULL, $max_redirects = 3, $timeout = 30) {
+   // Headers.
+-  $headers = explode("\r\n", $headers);
+-  foreach ($headers as $header) {
+-    list($name, $value) = explode(':', $header, 2);
+-    if (!empty($name)) {
+-      $options['headers'][$name] = ltrim($value);
+-    }
++  if( strpos(':', $headers) >= 0 ){
++  	$headers = explode("\r\n", $headers);
++  	foreach ($headers as $header) {
++    	list($name, $value) = explode(':', $header, 2);
++    	if (!empty($name)) {
++      		$options['headers'][$name] = ltrim($value);
++    	}
++  	}
+   }
+ 
+   // Method.
+@@ -97,8 +99,10 @@ function rules_http_client_request_url($url, $headers = '', $method = 'GET', $da
+   $options['method'] = $method == 'POST' ? 'POST' : 'GET';
+ 
+   // Data.
+-  $options['data'] = drupal_http_build_query(drupal_parse_info_format($data));
+-
++  if( isset($data) ){
++  	$options['data'] = drupal_http_build_query(drupal_parse_info_format($data));
++  }
++  
+   // Max redirects.
+   $options['max_redirects'] = empty($max_redirects) ? 3 : $max_redirects;
+ 

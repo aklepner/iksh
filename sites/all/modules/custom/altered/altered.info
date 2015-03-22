@@ -1,0 +1,4 @@
+name = Altered
+Description = Demo
+core = 7.x
+dependencies [] = services

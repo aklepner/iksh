@@ -1,0 +1,91 @@
+<?php
+
+/**
+ * @file
+ * Rules Web Hooks - Installation file.
+ */
+
+function rules_web_hooks_enable() {
+  // Force clearing module implements cache.
+  module_implements('services_resources', FALSE, TRUE);
+}
+
+/**
+ * Implementation of hook_schema().
+ */
+function rules_web_hooks_schema() {
+  $schema['rules_web_hooks'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'The internal identifier.',
+      ),
+      'name' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The name of the web hook.',
+      ),
+      'label' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The label of the web hook.',
+      ),
+      'active' => array(
+        'description' => 'Boolean indicating whether the web hook is active.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 1,
+      ),
+      'variables' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'serialize' => TRUE,
+        'description' => 'The variables provided by the web hook.',
+      ),
+    ),
+    'primary key' => array('id'),
+    'unique keys' => array(
+      'name' => array('name'),
+    ),
+  );
+  $schema['rules_web_hooks_subscriber'] = array(
+    'fields' => array(
+      'hook' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The name of the web hook subcribed to.',
+      ),
+      'url' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The subscribed URL, where to send the notifications.',
+      ),
+      'uid' => array(
+        'description' => 'The id of the user account used for authentication.',
+        'type' => 'int',
+        'not null' => FALSE,
+        'default' => 0,
+      ),
+      'http_auth' => array(
+        'type' => 'text',
+        'not null' => FALSE,
+        'description' => 'HTTP authentication credentials.',
+      ),
+      'token' => array(
+        'type' => 'varchar',
+        'length' => '255',
+        'not null' => TRUE,
+        'description' => 'The request token needed for sending notifications.',
+      ),
+    ),
+    'primary key' => array('hook', 'url'),
+  );
+  return $schema;
+}
+
+

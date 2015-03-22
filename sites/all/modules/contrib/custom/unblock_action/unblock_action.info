@@ -1,0 +1,3 @@
+name = Unlock Action
+description = Adds unblock action to drupal
+core = 7.x

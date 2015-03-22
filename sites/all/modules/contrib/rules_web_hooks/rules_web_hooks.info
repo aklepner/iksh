@@ -1,0 +1,25 @@
+name = Web Hooks
+description = Define and make use of Web Hooks with Rules.
+package = Rules
+core = 7.x
+files[] = rules_web_hooks.module
+files[] = rules_web_hooks.inc
+files[] = rules_web_hooks.rules.inc
+files[] = rules_web_hooks.install
+files[] = rules_web_hooks.services.inc
+files[] = tests/rules_web_hooks.test
+dependencies[] = rules
+;dependencies[] = services (3.x)
+; It looks like simpletest has troubles with the version information.
+dependencies[] = services
+dependencies[] = rest_server
+dependencies[] = rest_client
+dependencies[] = entity_resources
+dependencies[] = wsclient
+
+; Information added by drupal.org packaging script on 2013-10-01
+version = "7.x-1.x-dev"
+core = "7.x"
+project = "rules_web_hooks"
+datestamp = "1380626297"
+

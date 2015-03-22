@@ -1,0 +1,47 @@
+<?php
+
+/**
+ * Implements hook_token_info().
+ *
+ * @ingroup token_example
+ */
+function cart_tokens_token_info() {
+
+	$info['tokens']['user']['count'] = array(
+	  'name' => t('Commerce Cart Count'),
+	  'description' => t("The amount of items in the cart"),
+	  'type' => 'cart',
+	);
+
+  	return $info;
+}
+
+/**
+ * Implements hook_tokens().
+ *
+ * @ingroup token_example
+ */
+function cart_tokens_tokens($type, $tokens, array $data = array(), array $options = array()) {
+  $replacements = array();
+  $sanitize = !empty($options['sanitize']);
+
+  foreach ($tokens as $name => $original) {
+      switch ($name) {
+        case 'count':
+		  $count = 0;
+          global $user;
+		  $order = commerce_cart_order_load($user->uid);
+		  if ($order) {
+		      $wrapper = entity_metadata_wrapper('commerce_order', $order);
+		      $line_items = $wrapper->commerce_line_items;
+		      $count = commerce_line_items_quantity($line_items, commerce_product_line_item_types());
+		  }
+          $replacements[$original] = $count;
+          break;
+
+      }
+  }
+  
+  return $replacements;
+
+}

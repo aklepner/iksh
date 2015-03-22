@@ -1,0 +1,13 @@
+diff --git a/soap_server.module b/soap_server.module
+index d76c147..4fe1d99 100644
+--- a/soap_server.module
++++ b/soap_server.module
+@@ -277,7 +277,7 @@ function _soap_server_get_methods($endpoint) {
+         $soap_method_name = $resource_name .'_soap_'. $method_name;
+         $supported_methods[$soap_method_name] = $method_data;
+       }
+-      if ($method_name == "actions") {
++      if ($method_name == "operations" || $method_name == "actions") {
+         // TODO: confirm that all actions elements are valid methods
+         foreach ($method_data as $action_name => $action_data) {
+           $soap_method_name = $resource_name .'_soap_'. $action_name;

@@ -1,0 +1,48 @@
+body {
+	margin-top: 250px; /* 50px is the height of the navbar - change this if the navbarn height changes */
+	background-color:transparent;
+}
+
+.full {
+  	background: url('../img/bgimage.jpg') no-repeat center center fixed; 
+  	-webkit-background-size: cover;
+  	-moz-background-size: cover;
+  	-o-background-size: cover;
+  	background-size: cover;
+}
+
+.center-one {
+	background-color:transparent;
+	width:190px;
+	margin:0 auto;
+	padding-bottom:25px;
+}
+
+.center-two {
+	background-color:transparent;
+	width:678px;
+	margin:0 auto;
+	padding:25px 0;
+}
+
+.center-three {
+	background-color:transparent;
+	width:185px;
+	margin:0 auto;
+	padding-top:25px;
+}
+
+#social-icons {
+	margin:0;
+	padding:0;
+	text-align:center;
+	width:190px;
+	margin:0 auto;
+}
+
+#social-icons li {
+	list-style-type:none;
+	list-style-image:none;
+	float:left;
+	margin-right:5px;
+}

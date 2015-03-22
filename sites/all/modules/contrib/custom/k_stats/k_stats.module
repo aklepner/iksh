@@ -1,0 +1,36 @@
+<?php
+
+function k_stats_table_count($table = 'users') {
+	if($count = cache_get($table.'-count')) {
+		return $count->data;
+	} else {
+		$count = db_query("SELECT COUNT(*) as c FROM {$table} WHERE 1")->fetchField();
+		cache_set($table.'-count', $count, 'cache', CACHE_TEMPORARY);
+		return $count;
+	}
+	
+}
+
+function k_stats_get_disp_rating($id) {
+	
+	$rating = butter_cache_query('disp_rating_'.$id, "SELECT AVG(field_rating_value) as rating FROM {field_data_field_dispensary} as d
+													  INNER JOIN {field_data_field_rating} as r
+													  ON d.entity_id = r.entity_id
+													  WHERE d.field_dispensary_target_id = :id", array(":id" => $id));
+	
+	if($rating['rating']) {
+		return number_format($rating['rating'],1);
+	} else {
+		return '0';
+	}
+
+}
+
+function k_stats_count_reviews($id) {
+	
+	$count = butter_cache_query('review_count_'.$id, "SELECT COUNT(*) as c FROM {field_revision_field_dispensary}
+													  WHERE field_dispensary_target_id = :id", array(":id" => $id));
+													  
+	return $count['c'];
+	
+}

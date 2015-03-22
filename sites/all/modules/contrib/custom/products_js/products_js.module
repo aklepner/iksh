@@ -1,0 +1,45 @@
+<?php
+
+function products_js_init() {
+	drupal_add_js('sites/all/modules/custom/products_js/js/table-edit.js');
+	drupal_add_js('sites/all/modules/custom/products_js/js/prod-show.js');
+	drupal_add_js('sites/all/modules/custom/products_js/js/map-resize.js');
+	// prodjs/30
+} 
+
+function products_js_menu() {
+	 $items['prodjs/%'] = array(
+	    'title' => 'Prod JS',
+	    'page callback' => 'products_js_print',
+	    'page arguments' => array(1),
+	    'access arguments' => array('access content'),
+	    'type' => MENU_CALLBACK,
+	    'delivery callback' => 'products_js_ajax_callback',
+  	);
+
+  return $items;
+}
+
+function products_js_print($nid) {
+	$node = node_load($nid);
+  	return node_view($node, 'full');
+}
+
+function products_js_ajax_callback($page_callback_result) {
+  $content = drupal_render($page_callback_result);
+    $html = $content;
+    print $html;
+  	drupal_page_footer();
+}
+
+function products_js_node_validate($node, $form, &$form_state) {
+	if($node->type == 'product') {
+		$tid = $node->field_category['und'][0]['tid'];
+		if($tid == 9 || $tid == 10 || $tid == 19) {
+			if(count($node->field_product_information['und']['entities']) < 5) {
+				form_set_error('field_product_information', t('You must enter all 5 weights for Indica, Sativa, and Hybrid.'));
+			}
+		}
+	}
+}
+

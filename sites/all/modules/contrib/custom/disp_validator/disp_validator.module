@@ -1,0 +1,46 @@
+<?php
+
+function disp_validator_load_store_from_order($order) {
+	foreach($order->commerce_line_items as $li) {
+		$line_item = commerce_line_item_load($li[0]['line_item_id']);
+		$store = entity_load('store', array($line_item->field_store_id['und'][0]['value']));		
+		return $store[$line_item->field_store_id['und'][0]['value']];
+	}
+}
+
+function disp_validator_same_store_check($order,$line_item) {
+	$flag = FALSE;
+	foreach($order->commerce_line_items['und'] as $li) {
+		$item = commerce_line_item_load($li['line_item_id']);
+		if($line_item->field_store_id['und'][0]['value'] != $item->field_store_id['und'][0]['value']) {
+			$flag = TRUE;
+		}
+		if($li['line_item_id'] == $line_item->line_item_id) {
+			return $flag;
+		}	
+	}
+
+}
+
+function disp_validator_get_store_name_from_lid($lid) {
+	$line_item = commerce_line_item_load($lid);
+	$store_id = $line_item->field_store_id['und'][0]['value'];
+	$store = entity_load('store', array($store_id));
+	return $store[$store_id]->title;
+}
+
+function disp_validator_form_alter(&$form, &$form_state, $form_id) {
+	if($form_id == 'user_profile_form') {
+		//$form['field_biotrack_id']['#access'] = FALSE;
+	}
+}
+
+function disp_validator_mail_disp($order) {
+	if(!empty($order->commerce_line_items)) {
+		$line_item = commerce_line_item_load($order->commerce_line_items['und'][0]['line_item_id']);
+		$product = commerce_product_load($line_item->commerce_product['und'][0]['product_id']);
+		$user = user_load($product->uid);
+		return $user->mail;
+	}
+}
+

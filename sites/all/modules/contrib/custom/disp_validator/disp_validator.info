@@ -1,0 +1,4 @@
+name = Dispensary Validator
+description = Helper functions to grab information about dispensaries
+core = 7.x
+package = Tools

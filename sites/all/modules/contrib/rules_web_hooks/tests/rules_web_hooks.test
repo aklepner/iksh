@@ -1,0 +1,238 @@
+<?php
+
+/**
+ * @file
+ * Rules Web Hooks Tests
+ */
+
+class RulesWebHooksTest extends DrupalWebTestCase {
+
+  static function getInfo() {
+    return array(
+      'name' => 'Rules Web Hooks',
+      'description' => 'Tests providing and using rules web hooks.',
+      'group' => 'Rules',
+    );
+  }
+
+  /**
+   * Calculates the output of t() given an array of placeholders to replace.
+   */
+  static function t($text, $strings) {
+    $placeholders = array();
+    foreach ($strings as $string) {
+      $placeholders['%' . $string] = drupal_placeholder(array('text' => $string));
+    }
+    return strtr($text, $placeholders);
+  }
+
+  function setUp() {
+    // Set a reference on the current test case instance so we can use it to
+    // setup the remote's curl options.
+    $GLOBALS['RulesWebHooksTest'] = $this;
+    parent::setUp('rules_web_hooks_test');
+
+    // Create an admin user with access and log in.
+    $user = $this->createAdmin();
+    $user->name = '<b>xss</b>';
+    user_save($user, array('name' => $user->name));
+    $this->drupalLogin($user);
+
+    // Update the remote to connect with the new session.
+    $service = wsclient_service_load('self');
+    // Refresh caches so that the remote's stuff is added.
+    $this->remoteAddCurlOptions($service);
+
+    // Set up http auth for the http callback.
+    if (isset($this->httpauth_credentials)) {
+      $parts = explode(':', $this->httpauth_credentials);
+      variable_set('wsclient_httpauth_username', $parts[0]);
+      variable_set('wsclient_httpauth_password', $parts[1]);
+      variable_set('wsclient_httpauth_method', $this->httpauth_method);
+    }
+
+    rules_clear_cache(TRUE);
+    drupal_static_reset();
+    cache_clear_all('entity_info', 'cache', TRUE);
+    cache_clear_all('entity_property_info', 'cache', TRUE);
+    $service->clearCache();
+  }
+
+  /**
+   * Adds custom curl options to a web service so the remote is used to
+   * invoke the currently running test instance via REST.
+   * @see rules_web_hooks_test_default_wsclient_service()
+   */
+  public function remoteAddCurlOptions($service) {
+    $service->settings['curl options'] = array(
+      // For testing skip ssl verification.
+      CURLOPT_SSL_VERIFYPEER => FALSE,
+      CURLOPT_SSL_VERIFYHOST => FALSE,
+      // For testing just keep the current session.
+      CURLOPT_COOKIE => $this->session_name . '=' . $this->session_id,
+      // Pass through errors and debug statements to simpletest.
+      CURLOPT_HEADERFUNCTION => array(&$this, 'publicCurlHeaderCallback'),
+    );
+    // Add in the simpletest http auth credentials, if any.
+    if (isset($this->httpauth_credentials)) {
+      $service->settings['curl options'] += array(
+        CURLOPT_HTTPAUTH => $this->httpauth_method,
+        CURLOPT_USERPWD => $this->httpauth_credentials,
+      );
+    }
+    // Add the simpletest useragent so we connect to the testing instance.
+    if (preg_match('/simpletest\d+/', $this->databasePrefix, $matches)) {
+      $service->settings['curl options'][CURLOPT_USERAGENT] = drupal_generate_test_ua($matches[0]);
+    }
+  }
+
+  /**
+   * A public wrapper around the protected method curlHeaderCallback().
+   */
+  public function publicCurlHeaderCallback($curlHandler, $header) {
+    return $this->curlHeaderCallback($curlHandler, $header);
+  }
+
+  function createAdmin() {
+    $perms = array_keys(module_invoke_all('permission'));
+    return $this->drupalCreateUser($perms);
+  }
+
+  /**
+   * Basic tests.
+   */
+  function testBasicService() {
+    $user = $this->loggedInUser;
+    $service = wsclient_service_load('self');
+
+    module_load_include('inc', 'rules_web_hooks', 'rules_web_hooks.services');
+    $this->assertTrue($service->entities() == rules_web_hooks_list_entity_metadata(), 'Data types returned.');
+
+    $return = drupal_json_decode(drupal_json_encode(rules_web_hooks_list_hooks()));
+    $this->assertTrue($service->events() == $return, 'Events returned.');
+
+    // Test loading data.
+    $remote_user = $service->load('user', $user->uid);
+    $this->assertEqual($remote_user->name, $user->name, 'Remote user loaded.');
+
+    // Test loading data through entity_load().
+    rules_web_hooks_test_inject_entity_types($service);
+    entity_metadata_info_cache_clear();
+    $return = entity_load('wsclient_self_user', array($user->uid));
+    $remote_user = reset($return);
+    $this->assertEqual($remote_user->name, $user->name, 'Remote user loaded with entity_load()');
+
+    // Now try using a data wrapper to access the properties as stated.
+    $wrapper = entity_metadata_wrapper('wsclient_self_user', $remote_user);
+    $this->assertEqual($wrapper->name->value(), $user->name, 'Using wrapper with remote entity.');
+    $this->assertEqual($wrapper->name->value(array('sanitize' => TRUE)), filter_xss($user->name), 'Sanitizing with remote data.');
+
+    // Make sure accessing a not existing property doesn't cause troubles.
+    unset($remote_user->name);
+    $wrapper = entity_metadata_wrapper('wsclient_self_user', $remote_user);
+    $this->assertFalse($wrapper->name->value(), 'Accessing not existing property');
+
+    $events = rules_fetch_data('event_info');
+    $this->assertTrue(isset($events['wsclient_self_test']), 'Test event is available.');
+    // Make sure the type has been mapped properly.
+    $this->assertTrue($events['wsclient_self_test']['variables']['node']['type'] == 'wsclient_self_node', 'Event variable type mapped.');
+
+    // Get a remote node and invoke the event!
+    $node = $this->drupalCreateNode(array('type' => 'article', 'title' => 'foo'));
+    $return = entity_load('wsclient_self_node', array($node->nid));
+    $remote_node = reset($return);
+
+    // Test reacting on the remote event.
+    $rule = rules_reaction_rule();
+    $rule->event('wsclient_self_test')
+         ->action('entity_fetch', array('type' => 'node', 'id' => $node->nid))
+         ->action('data_set', array('data:select' => 'entity_fetched:title', 'value:select' => 'node:title'))
+         ->save();
+    rules_clear_cache(TRUE);
+
+    // Invoke event.
+    $remote_node->title = 'bar';
+    rules_invoke_event('wsclient_self_test', $remote_node);
+
+    $node = node_load($node->nid, NULL, TRUE);
+    $this->assertEqual($node->title, 'bar', 'Reacted on remote event.');
+
+    // Now try again but invoke via a REST call.
+    $node->title = 'foo';
+    node_save($node);
+    // Save our remote object curl options so the loaded remote is fine, but
+    // exclude the test case as error handler.
+    unset($service->settings['curl options'][CURLOPT_HEADERFUNCTION]);
+    $service->save();
+    $this->remoteAddCurlOptions($service);
+    // Refresh curl options for endpoint client
+    $service->endpoint()->client()->curlOpts = $service->settings['curl options'];
+
+    // Make sure the used client works with the simpletest environment.
+    $client = rules_web_hooks_get_client();
+    $client->curlOpts = $service->settings['curl options'];
+
+    $time = time();
+    $callback_url = url('wsclient/self/notify', array('absolute' => TRUE));
+    $client->post($callback_url, array(
+       'event_name' => 'test',
+       'event_data' => array('node' => $remote_node),
+       'time' => $time,
+       'token' => rules_web_hooks_hash_token($service->token, $time),
+    ));
+
+    $node = node_load($node->nid, NULL, TRUE);
+    $this->assertEqual($node->title, 'bar', 'Reacted on remote event invoked via a HTTP notification.');
+
+    // As we have configured a rule for the event, we should have been
+    // auto-subscribed. Test that.
+    $this->assertTrue($service->isSubscribedTo('test'), 'Web service has tracked the subscription.');
+
+    $return = db_select('wsclient_subscriptions', 'r')
+      ->fields('r')
+      ->condition('name', $service->name)
+      ->condition('event', 'test')
+      ->execute()->fetchAssoc();
+    $this->assertEqual($return['event'], 'test', 'Subscription is correct in the database.');
+
+    // Unsubscribe for further testing and make sure the remote got that.
+    $service->unsubscribe('test');
+    $this->assertFalse($service->isSubscribedTo('test'), 'Web service has tracked the unsubscription.');
+    $return = db_select('wsclient_subscriptions', 'r')
+      ->fields('r')
+      ->condition('name', $service->name)
+      ->condition('event', 'test')
+      ->execute()->fetchAssoc();
+    $this->assertTrue(empty($return), 'Subscription has been removed from the database.');
+
+    // Test subcription service. Use directly the endpoint so if exceptions
+    // occure simpletest can get them.
+    $endpoint = $service->endpoint();
+    $endpoint->subscribe('test');
+
+    $return = db_select('rules_web_hooks_subscriber')
+      ->fields('rules_web_hooks_subscriber', array('url'))
+      ->condition('hook', 'test')
+      ->execute()->fetchAssoc();
+    $this->assertTrue($return['url'] == $callback_url, 'Subscribed to web hook.');
+
+    // Test invoking the web hook and sending out subscribtion notifications by
+    // setting the title of the node to the title of the passed node (foo2).
+    /*$node2 = $this->drupalCreateNode(array('type' => 'article', 'title' => 'foo2'));
+    //rules_web_hooks_invoke('test', array('node' => $node2));
+    // Use the action to invoke the hook.
+    rules_action('web_hook_invoke_test')->execute($node2);
+
+    $node = node_load($node->nid, NULL, TRUE);
+    $this->assertEqual($node->title, 'foo2', 'Sent event notification to subscriber and reacted.');
+
+    // Delete subcription.
+    $endpoint->unsubscribe('test');
+
+    $return = db_select('rules_web_hooks_subscriber')
+      ->fields('rules_web_hooks_subscriber', array('url'))
+      ->condition('hook', 'test')
+      ->execute()->fetchAssoc();
+    $this->assertFalse($return, 'Unsubscribed to web hook.');*/
+  }
+}
