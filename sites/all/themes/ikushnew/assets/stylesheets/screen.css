@@ -1,3 +1,5 @@
+/* @override http://localhost:8888/ikushold/sites/all/themes/ikushnew/assets/stylesheets/screen.css?nm8m53 */
+
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 /* line 9, ../../../../../../../../../../Library/Ruby/Gems/2.0.0/gems/bootstrap-sass-3.3.0.1/assets/stylesheets/bootstrap/_normalize.scss */
 html {
@@ -12027,12 +12029,11 @@ div#navbar-collapse.collapse.navbar-collapse {
 
 /* line 48, ../sass/partials/_view.scss */
 .col-md-6.radix-layouts-contentcolumn1.panel-panel {
-  border: 1px solid #cdcdcd;
   background-color: #ffffff;
   padding-top: 20px;
   padding-bottom: 20px;
   margin-left: 10px;
-  width: 380px;
+  width: 755px;
   margin-bottom: 20px;
 }
 

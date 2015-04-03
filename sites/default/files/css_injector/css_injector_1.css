@@ -1,8 +1,51 @@
-/* @override http://localhost:8888/ikushold/sites/default/files/css_injector/css_injector_1.css?nk7e0d */
+/* @override http://localhost:8888/ikushold/sites/default/files/css_injector/css_injector_1.css?nm8m53 */
 
-/* @override http://localhost:8888/ikushold/sites/default/files/css_injector/css_injector_1.css?nk7e0d */
+/* @override http://localhost:8888/ikushold/sites/default/files/css_injector/css_injector_1.css?nm8lfe */
 
 /**/
+
+body {
+	font-family: 'Open Sans';
+}
+
+#block-block-4 {
+	margin-left: -15px;
+	margin-top: 0;
+}
+
+.view-featured-dispensaries div.views-row {
+	float: left;
+	margin-right: 10px;
+	height: 270px;
+	margin-bottom: 10px;
+	background-color: #fff;
+	border: 1px solid #ddd;
+	box-shadow: 1px 1px 5px #ddd;
+}
+
+#main-menu li a {
+	color: #fff;
+	text-transform: uppercase;
+	font-size: 18px;
+}
+
+h4 {
+	font-family: 'Open Sans';
+	font-size: 24px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 100;
+	line-height: 26.3999996185303px;
+}
+.disp-title h4 {
+	font-family: 'Open Sans';
+	font-size: 38px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 100;
+	line-height: 26.3999996185303px;
+	margin-bottom: -18px;
+}
 
 #views-exposed-form-map-page div div.views-exposed-form div.views-exposed-widgets.clearfix {
 	background-color: #ffffff;
@@ -23,7 +66,7 @@ div.openlayers-views-map {
 }
 
 #edit-field-geofield-distance-origin {
-		width: 350px;
+	width: 350px;
 }
 
 div.form-item.form-type-select.form-item-field-geofield-distance-unit.form-group {
@@ -33,9 +76,6 @@ div.form-item.form-type-select.form-item-field-geofield-distance-unit.form-group
 
 #edit-submit-map {
 	margin-top: -3px;
-}
-body{
-	background-color: #000;
 }
 
 small.copyright.pull-left {
@@ -55,20 +95,49 @@ div.page-header {
 	border: 1px solid #e4e4e4;
 }
 
-div.views-field.views-field-title {
-	margin-left: 10px;
+.view-featured-dispensaries .views-field.views-field-title {
 	font-size: 18px;
-	font-weight: bold;
+	font-weight: 100;
+	background-color: #fff;
+	position: relative;
+	top: -50px;
+	width: 200px;
+	margin-left: 55px;
+	padding: 5px 10px;
+	box-shadow: 1px 1px 5px #d3d3d3;
+	border: 1px solid #d3d3d3;
 }
 
-div.views-field.views-field-field-address span.country {
+.view-featured-dispensaries div.street-block {
+	color: #6cb25f;
+	font-size: 18px;
+	font-weight: 100;
+}
+
+.view-featured-dispensaries .views-field.views-field-field-address {
+	top: -30px;
+	position: relative;
+	color: #656565;
+	margin-left: 10px;
+}
+
+.view-featured-dispensaries .views-field.views-field-field-address span.country {
 	display: none;
 }
 
-div.views-field.views-field-field-address {
-		margin-left: 10px;
+.view-featured-dispensaries .views-field.views-field-field-phone {
+	margin-right: 10px;
+	top: -26px;
+	position: relative;
+	font-size: 18px;
+	font-weight: 100;
+	float: right;
+}
+.view-featured-dispensaries .views-field.views-field-field-profile-image {
+	box-shadow: 0px 0px 5px #d3d3d3;
 }
 
-div.views-field.views-field-field-phone {
-		margin-left: 10px;
+.pane-entity-field.pane-store-field-profile-image div.field.field-name-field-profile-image.field-type-image.field-label-hidden div.field-items div.field-item.even img {
+	float: left;
+	margin-right: 15px;
 }
