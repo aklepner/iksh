@@ -1,9 +1,5 @@
 /* @override http://localhost:8888/ikushold/sites/default/files/css_injector/css_injector_1.css?nm8m53 */
 
-/* @override http://localhost:8888/ikushold/sites/default/files/css_injector/css_injector_1.css?nm8lfe */
-
-/**/
-
 body {
 	font-family: 'Open Sans';
 }
@@ -11,12 +7,12 @@ body {
 #block-block-4 {
 	margin-left: -15px;
 	margin-top: 0;
+	margin-bottom: 13px;
 }
-
 .view-featured-dispensaries div.views-row {
 	float: left;
 	margin-right: 10px;
-	height: 270px;
+	height: 300px;
 	margin-bottom: 10px;
 	background-color: #fff;
 	border: 1px solid #ddd;
@@ -99,13 +95,12 @@ div.page-header {
 	font-size: 18px;
 	font-weight: 100;
 	background-color: #fff;
-	position: relative;
-	top: -50px;
+	
+	
 	width: 200px;
-	margin-left: 55px;
+	
 	padding: 5px 10px;
-	box-shadow: 1px 1px 5px #d3d3d3;
-	border: 1px solid #d3d3d3;
+	
 }
 
 .view-featured-dispensaries div.street-block {
@@ -115,7 +110,7 @@ div.page-header {
 }
 
 .view-featured-dispensaries .views-field.views-field-field-address {
-	top: -30px;
+	top: -0px;
 	position: relative;
 	color: #656565;
 	margin-left: 10px;
@@ -127,7 +122,7 @@ div.page-header {
 
 .view-featured-dispensaries .views-field.views-field-field-phone {
 	margin-right: 10px;
-	top: -26px;
+	top: 20px;
 	position: relative;
 	font-size: 18px;
 	font-weight: 100;
