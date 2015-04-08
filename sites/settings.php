@@ -1,13 +1,13 @@
 <?php
 
 $databases = array (
-  'default' => 
+  'default' =>
   array (
-    'default' => 
+    'default' =>
     array (
-      'database' => 'ikush_new',
-      'username' => 'ikush_new',
-      'password' => 'ikush!23',
+      'database' => 'ikush_beta',
+      'username' => 'beta',
+      'password' => 'ikush123',
       'host' => 'localhost',
       'port' => '3306',
       'driver' => 'mysql',
